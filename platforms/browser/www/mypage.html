@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+        <!--
+        Customize this policy to fit your own app's needs. For more guidance, see:
+            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+        Some notes:
+            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+                * Enable inline JS: add 'unsafe-inline' to default-src
+        -->
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script type="text/javascript" src="js/custom.js"></script>
+        <title>Hello World</title>
+    </head>
+    <body onload="main()">
+    <style>
+    #loading-view {
+     /* 領域の位置やサイズに関する設定 */
+     width: 100%;
+     height: 100%;
+     z-index: 9999;
+     position: fixed;
+     top: 0;
+     left: 0;
+     /* 背景関連の設定 */
+     background-color: #000000;
+     filter: alpha(opacity=85);
+     -moz-opacity: 0.85;
+     -khtml-opacity: 0.85;
+     opacity: 0.85;
+     background-image: url(img/anime.gif);
+     background-size: contain;
+     background-position: center center;
+     background-repeat: no-repeat;
+     background-attachment: fixed;
+     color: white;
+    }
+    div.example1 {
+        width: 100%;
+        white-space: nowrap;
+        overflow-x: scroll;
+        overflow-y: visible;
+        background-color: #fffbf4;
+        color: black;
+    }
+    body{
+        background-color: #f89174 !important;
+        color: white;
+    }
+    #time{
+        width: 100%;
+    }
+    .list-group{
+        margin-bottom: 0px;
+    }
+        
+    </style>
+        <div id="loading-view">
+        <h3>読み込み中</h3>
+        </div>
+            <script>
+                function main(){
+                    var id = localStorage.getItem('id');
+                    var password = localStorage.getItem('password');
+                    $.ajax({
+                        url: "http://ity-y.sakura.ne.jp/senshu/senshu_api.php?id="+id+"&pass="+password
+                    }).done(function(data){ //ajaxの通信に成功した場合
+                        $('body').append(data);
+                        $('body').append('<h3>授業時間</h3>');
+                        $('body').append('<img src="img/time.png" id="time" alt="">')
+                        $('#loading-view').remove();
+                        localStorage.setItem('login','1');
+                        var links = $('a');
+                        for(var i = 0;i < links.length;i++){
+                            if(!$('a')[i].href.match(/sw/) && !$('a')[i].href.match(/syllabus/)){
+                                $('a')[i].href = "./detail.html?url="+escape($('a')[i].href)
+                                console.log('iii');
+                            }else if($('a')[i].href.match(/sw/)){
+                              var ele_id = $('a')[i].href.split("javascript:sw('")[1].split("')")[0]
+                              $('a')[i].href = "./detail_sw.html?ele_id="+ele_id
+                            }
+                        }
+                        if (document.getElementsByTagName('h1')[0].innerHTML=="専修大学ポータル") {
+                            alert('認証失敗');
+                            location.href="./index.html";
+                        }else{
+                            localStorage.setItem('login_flag','1');
+                        }
+                    }).fail(function(data){ //ajaxの通信に失敗した場合
+                        alert("error!");
+                    });
+                }
+
+                function sw(obj){
+                  if(document.getElementById) {
+                    if (document.getElementById(obj).style.display=='none') {
+                      document.getElementById(obj).style.display='' ;
+                    } else {
+                      document.getElementById(obj).style.display='none';
+                    }
+                    setAjaxCookie(obj, document.getElementById(obj).style.display);
+                  } else if(document.all) {
+                    if (document.all(obj).style.display=='none') {
+                      document.all(obj).style.display='' ;
+                    } else {
+                      document.all(obj).style.display='none';
+                    }
+                    setAjaxCookie(obj, document.all(obj).style.display);
+                  } else if(document.layers) {
+                    if (document.layers[obj].display=='none') {
+                      document.layers[obj].display='' ;
+                    } else {
+                      document.layers[obj].display='none';
+                    }
+                    setAjaxCookie(obj, document.layers(obj).display);
+                  }
+                }
+
+            </script>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+    </body>
+</html>

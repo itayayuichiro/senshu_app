@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+        <!--
+        Customize this policy to fit your own app's needs. For more guidance, see:
+            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+        Some notes:
+            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+                * Enable inline JS: add 'unsafe-inline' to default-src
+        -->
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script type="text/javascript" src="js/custom.js"></script>
+        <title>Hello World</title>
+    </head>
+    <body onload="login()">
+    <style>
+    #loading-view {
+     /* 領域の位置やサイズに関する設定 */
+     width: 100%;
+     height: 100%;
+     z-index: 9999;
+     position: fixed;
+     top: 0;
+     left: 0;
+     /* 背景関連の設定 */
+     background-color: #000000;
+     filter: alpha(opacity=85);
+     -moz-opacity: 0.85;
+     -khtml-opacity: 0.85;
+     opacity: 0.85;
+     background-image: url(img/anime.gif);
+     background-position: center center;
+     background-repeat: no-repeat;
+     background-attachment: fixed;
+     color: white;
+    }
+    .login_form{
+      height: 100%;
+      display: flex;
+      align-items: center;   
+    }
+    .forms{
+      width: 80%;
+      text-align: center;
+    }
+    html {
+        height: 100%;
+    }
+    input{
+      font-size: 20px;
+      height: 30px;
+    }
+    body {
+        height: 100%;
+        margin: 0;
+    }
+
+    </style>
+      <div class="login_form">
+        <center style="width:100%">
+          <div class="forms">
+            <h1>専修大学ポータルアプリ</h1><br>
+              <input type="text" class="form-control" id="id" placeholder="id"><br>
+              <input type="password" class="form-control" id="password" placeholder="password"><br>
+              <input type="button" class="btn btn-success" name="" value="ログイン" onclick="main()">
+          </div>
+        </center>
+      </div>
+    
+<!--        <input type="text" id="id" name="" value="" placeholder="">
+        <input type="password" id="password" name="" value="" placeholder="">
+        <input type="button" name="" value="ログイン" onclick="main()">
+-->
+        <script>
+            function login(){
+              if (localStorage.getItem('login')=='1') {
+                  location.href = './mypage.html';
+              }
+            }
+            function main(){
+                var id = document.getElementById('id').value;
+                var password = document.getElementById('password').value;
+                localStorage.setItem('id',id);
+                localStorage.setItem('password',password);
+                location.href = './mypage.html';
+            }
+
+        </script>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+    </body>
+</html>

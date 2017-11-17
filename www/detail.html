@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+        <!--
+        Customize this policy to fit your own app's needs. For more guidance, see:
+            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+        Some notes:
+            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+                * Enable inline JS: add 'unsafe-inline' to default-src
+        -->
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script type="text/javascript" src="js/custom.js"></script>
+        <title>Hello World</title>
+    </head>
+    <body onload="main()">
+        <div class="container">
+            
+        <style>
+        #table_kubun_kyuko {
+            width: 100%;
+            white-space: nowrap;
+            overflow-x: scroll;
+            overflow-y: visible;
+            background-color: #fffbf4;
+            color: black;
+        }
+        #table_kubun_rinji{
+            width: 100%;
+            white-space: nowrap;
+            overflow-x: scroll;
+            overflow-y: visible;
+            background-color: #fffbf4;
+            color: black;            
+        }
+        body{
+            background-color: white;
+            color: black;
+        }
+        #time{
+            width: 100%;
+        }
+        .list-group{
+            margin-bottom: 0px;
+        }
+        .message_check{
+            border: 1px solid;
+        }
+        </style>
+        </div>
+        <div id="loading-view">
+        <h3>読み込み中</h3>
+        </div>
+
+            <script>
+                function message(){
+                    alert('pdfのダウンロートは本サイトにて行ってください')
+                }
+                function main(){
+                    var url = location.href.split('?url=')[1];
+                    var id = localStorage.getItem('id');
+                    var password = localStorage.getItem('password');
+                    //window.plugins.childBrowser.showWebPage(encodeURI("http://docs.google.com/viewer?url=http://www.tokyu.co.jp/file/170720.pdf"))
+
+                    $.ajax({
+                        url: "http://ity-y.sakura.ne.jp/senshu/senshu_api_detail.php?id="+id+"&url="+url
+                    }).done(function(data){ //ajaxの通信に成功した場合
+                        $('.container').append(data);
+                        $('.nw a').remove();
+                        $('#loading-view').remove();
+                        var links = $('a');
+                        for(var i = 0;i < links.length;i++){
+                            if(!$('a')[i].href.match(/sw/) && !$('a')[i].href.match(/syllabus/)){
+                                $('a')[i].href = "./detail.html?url="+escape($('a')[i].href)
+                            }
+                            if ($('a')[i].href.match(/download/)) {
+                                $('a')[i].href = "#";
+                                $('a')[i].onclick = message;
+                            }
+                        }
+                    }).fail(function(data){ //ajaxの通信に失敗した場合
+                        alert("error!");
+                    });
+                }
+
+            </script>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+    </body>
+</html>
